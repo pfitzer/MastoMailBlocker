@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.db import IntegrityError
 from django.shortcuts import render, redirect
 from django.views.generic import TemplateView
@@ -24,6 +25,7 @@ class HomeView(TemplateView):
             client.client_url = request.POST['host']
             client.save()
         except IntegrityError as e:
+            messages.error(request, 'This host already exists in the database')
             return redirect('home')
 
         mast = Mastodon(client_id=client.client_id, client_secret=Client.client_secret, api_base_url=client.client_url)
