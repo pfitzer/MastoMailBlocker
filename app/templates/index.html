@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+    <div>
+    <form id="ClientForm" action="{% url 'home' %}" method="POST">
+        {% csrf_token %}
+        <input type="text" name="host" value="">
+        <button type="submit">submit</button>
+    </form>
+    </div>
+{% endblock %}
