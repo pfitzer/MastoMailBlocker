@@ -2,12 +2,37 @@
 
 
 {% block content %}
-
-    <div>
-    <form id="ClientForm" action="{% url 'home' %}" method="POST">
-        {% csrf_token %}
-        <input type="text" name="host" value="">
-        <button type="submit">submit</button>
-    </form>
+    <div class="px-4 py-5 my-5 text-center">
+        <div class="col-lg-6 mx-auto">
+            <p class="lead mb-4">
+                Spam is becoming a growing problem for Mastodon instances. This service helps you to block certain email
+                addresses during user registration. Simply enter the URL to your Mastodon instance, authorize the app
+                and <b>MastoMailBlocker</b> will take care of the rest.
+            </p>
+        </div>
+    </div>
+    <div class="px-4 py-5 my-5">
+        <div class="col-lg-8 mx-auto">
+            <form id="ClientForm" action="{% url 'home' %}" method="POST">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="host" class="col-form-label">Client Url</label>
+                    <input class="form-control" type="text" name="host" value="" placeholder="https://mastodon.social">
+                </div>
+                <div class="mb-3">
+                    <label for="host" class="col-form-label">Client-Key</label>
+                    <input class="form-control" type="text" name="client-key" value="">
+                </div>
+                <div class="mb-3">
+                    <label for="host" class="col-form-label">Client-Secret</label>
+                    <input class="form-control" type="text" name="client-secret" value="">
+                </div>
+                <div class="mb-3">
+                    <label for="host" class="col-form-label">Access Token</label>
+                    <input class="form-control" type="text" name="access-token" value="">
+                    <button type="submit" class="btn btn-primary mb-3 mt-3">add client</button>
+                </div>
+            </form>
+        </div>
     </div>
 {% endblock %}

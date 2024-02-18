@@ -1,2 +1,2 @@
 Django==5.0.2
-Mastodon.py==1.8.1
+requests~=2.31.0
