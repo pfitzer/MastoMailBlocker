@@ -16,3 +16,4 @@ media
 /.idea/
 .env.example
 .env
+/.github/
