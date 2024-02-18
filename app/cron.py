@@ -22,7 +22,7 @@ class DomainCronJob(CronJobBase):
     Methods:
         do(): Executes the cron job by fetching a list of domains, iterating through each domain, and performing certain actions.
     """
-    RUN_EVERY_MINS = 120
+    RUN_EVERY_MINS = 60 * 24 * 7
 
     schedule = Schedule(run_every_mins=RUN_EVERY_MINS)
     code = 'app.domain_cron_job'

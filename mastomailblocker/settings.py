@@ -23,9 +23,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-uud=y1^y^57835^fr&@$yb8c5$h!8+hqb^a*=vyk0*pzz+)d(k'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['masto-mail-blocker.localhost']
 
 
 # Application definition
@@ -130,7 +130,7 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CRON_CLASSES = [
-    "app.cron.MyCronJob",
+    "app.cron.DomainCronJob",
 ]
 
 DISPOSABLE_MAILS_URL = 'https://raw.githubusercontent.com/disposable-email-domains/disposable-email-domains/master/disposable_email_blocklist.conf'

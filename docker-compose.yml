@@ -5,38 +5,45 @@ services:
     container_name: nginx-proxy
     ports:
       - "80:80"
+#      - "443:443"
     volumes:
       - /var/run/docker.sock:/tmp/docker.sock:ro
-      - ./config:/etc/nginx/conf.d
       - ./.nginx/default_location:/etc/nginx/vhost.d/default_location
-      - static:/var/www/html/static
+      - static:/var/www/html/static:ro
     restart: unless-stopped
+#  letsencrypt-proxy:
+#    image: jrcs/letsencrypt-nginx-proxy-companion
+#    container_name: letsencrypt-proxy
+#    volumes:
+#      - /var/run/docker.sock:/var/run/docker.sock:ro
+#      - letsencrypt-certs:/etc/nginx/certs
+#      - letsencrypt-vhost-d:/etc/nginx/vhost.d
+#      - letsencrypt-html:/usr/share/nginx/html
+#    environment:
+#      - DEFAULT_EMAIL=${DJANGO_SUPERUSER_EMAIL}
+#      - NGINX_PROXY_CONTAINER=nginx-proxy
+#    recstart: unless-stopped
   web:
-    image: python:latest
+    build: .
     container_name: masto-mail-blocker
     environment:
-      - VIRTUAL_HOST=masto-mail-blocker.localhost
-      - VIRTUAL_PORT=8888
+      - VIRTUAL_HOST=${HOST}
+      - VIRTUAL_PROTO=uwsgi
+#      - LETSENCRYPT_HOST=${HOST}
+#      - LETSENCRYPT_EMAIL=p${DJANGO_SUPERUSER_EMAIL}
+    env_file:
+      - .env.example
     expose:
-      - 8888
+      - 3031
     volumes:
-      - ./app:/usr/src/local/app
-      - ./mastomailblocker:/usr/src/local/mastomailblocker
-      - ./templates:/usr/share/local/templates
-      - ./manage.py:/user/share/local/manage.py
-      - ./requirements.txt:/user/share/local/requirements.txt
-      - ./db.sqlite3:/user/share/local/db.sqlite3
-      - static:/usr/share/local/staticfiles
+      - uwsgi_data:/tmp/uwsgi/
+      - static:/code/staticfiles
     command: >
-      sh -c "pip install -r requirements.txt && python manage.py collectstatic --noinput &&
-             python manage.py runserver 0.0.0.0:8888 --insecure"
-
-
-
-networks:
-  default:
-    external:
-      name: nginx-proxy
+      sh -c "python manage.py migrate && python manage.py createsuperuser --noinput &&
+        python manage.py importdomains &&
+        python manage.py collectstatic --noinput &&
+        uwsgi --ini /code/mastomailblocker.uwsgi.ini"
 
 volumes:
   static:
+  uwsgi_data:

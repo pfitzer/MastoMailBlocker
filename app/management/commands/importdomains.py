@@ -11,6 +11,7 @@ class Command(BaseCommand):
     help = 'Import email domains to database'
 
     def handle(self, *args, **options):
+        self.stdout.write("Importing disposable domains...")
         domains = urllib.request.urlopen(settings.DISPOSABLE_MAILS_URL)
         for line in domains.readlines():
             try:
