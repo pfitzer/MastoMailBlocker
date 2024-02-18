@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load app_extra %}
 
 
 {% block content %}
@@ -9,27 +10,35 @@
                 addresses during user registration. Simply enter the URL to your Mastodon instance, authorize the app
                 and <b>MastoMailBlocker</b> will take care of the rest.
             </p>
+            {% show_domain_count %}
         </div>
     </div>
-    <div class="px-4 py-5 my-5">
+    <div class="px-4 py-5 my-5 border rounded">
         <div class="col-lg-8 mx-auto">
+            <div class="text-secondary text-center">
+                <p>Go to <i>https://YOUR_INSTANCE/settings/applications</i> and create a new application and grant
+                    access to <span class="text-black fst-italic">read</span> and <span class="text-black fst-italic">admin:write:email_domain_blocks</span>.
+                    Then insert the given keys and tokens to this form. And remember, <strong>you need to be
+                        administrator</strong> of this instance. That`s it!</p>
+                <p>If you don`t want to use this service anymore, just delete the application on your instance.</p>
+            </div>
             <form id="ClientForm" action="{% url 'home' %}" method="POST">
                 {% csrf_token %}
                 <div class="mb-3">
                     <label for="host" class="col-form-label">Client Url</label>
-                    <input class="form-control" type="text" name="host" value="" placeholder="https://mastodon.social">
+                    <input class="form-control" type="text" name="host" value="" placeholder="https://mastodon.social" required>
                 </div>
                 <div class="mb-3">
                     <label for="host" class="col-form-label">Client-Key</label>
-                    <input class="form-control" type="text" name="client-key" value="">
+                    <input class="form-control" type="text" name="client-key" value="" required>
                 </div>
                 <div class="mb-3">
                     <label for="host" class="col-form-label">Client-Secret</label>
-                    <input class="form-control" type="text" name="client-secret" value="">
+                    <input class="form-control" type="text" name="client-secret" value="" required>
                 </div>
                 <div class="mb-3">
-                    <label for="host" class="col-form-label">Access Token</label>
-                    <input class="form-control" type="text" name="access-token" value="">
+                    <label for="host" class="col-form-label">Access-Token</label>
+                    <input class="form-control" type="text" name="access-token" value="" required>
                     <button type="submit" class="btn btn-primary mb-3 mt-3">add client</button>
                 </div>
             </form>

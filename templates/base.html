@@ -12,14 +12,20 @@
     <header class="p-3 bg-dark text-white">
         <div class="container">
             <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-                <h1>MastoMailBlocker</h1>
+                <h1 class="d-flex align-items-center mb-2 mb-lg-0 me-4 text-white text-decoration-none">MastoMailBlocker</h1>
+                <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                    <li><a href="{% url 'home' %}" class="nav-link px-2 text-white">Home</a></li>
+                    <li><a href="#" class="nav-link px-2 text-white">How To</a></li>
+                    <li><a href="#" class="nav-link px-2 text-white">FAQs</a></li>
+                </ul>
             </div>
         </div>
     </header>
     <div class="container mt-4">
         {% if messages %}
             {% for message in messages %}
-                <div class="alert {% if message.tags %}{{ message.tags }}{% endif %} alert-dismissible fade show" role="alert">
+                <div class="alert {% if message.tags %}{{ message.tags }}{% endif %} alert-dismissible fade show"
+                     role="alert">
                     <strong>{{ message }}</strong>
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
