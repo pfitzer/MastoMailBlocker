@@ -1,0 +1,42 @@
+version: "3"
+services:
+  nginx-proxy:
+    image: jwilder/nginx-proxy
+    container_name: nginx-proxy
+    ports:
+      - "80:80"
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - ./config:/etc/nginx/conf.d
+      - ./.nginx/default_location:/etc/nginx/vhost.d/default_location
+      - static:/var/www/html/static
+    restart: unless-stopped
+  web:
+    image: python:latest
+    container_name: masto-mail-blocker
+    environment:
+      - VIRTUAL_HOST=masto-mail-blocker.localhost
+      - VIRTUAL_PORT=8888
+    expose:
+      - 8888
+    volumes:
+      - ./app:/usr/src/local/app
+      - ./mastomailblocker:/usr/src/local/mastomailblocker
+      - ./templates:/usr/share/local/templates
+      - ./manage.py:/user/share/local/manage.py
+      - ./requirements.txt:/user/share/local/requirements.txt
+      - ./db.sqlite3:/user/share/local/db.sqlite3
+      - static:/usr/share/local/staticfiles
+    command: >
+      sh -c "pip install -r requirements.txt && python manage.py collectstatic --noinput &&
+             python manage.py runserver 0.0.0.0:8888 --insecure"
+
+
+
+networks:
+  default:
+    external:
+      name: nginx-proxy
+
+volumes:
+  static:
