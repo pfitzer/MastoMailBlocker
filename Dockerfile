@@ -15,4 +15,4 @@ RUN pip install -r requirements.txt
 
 EXPOSE 3031
 
-CMD ["uwsgi", "--ini", "/code/mastomailblocker.uwsgi.ini"]
+CMD ["uwsgi", "--ini", "/code/uwsgi.ini"]
