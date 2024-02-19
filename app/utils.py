@@ -21,7 +21,7 @@ def initial_mail_adding(client: Client) -> bool:
             r = requests.post(f"{client.client_url}/api/v1/admin/email_domain_blocks", headers=headers,
                               data=payload)
             if r.status_code != 200:
-                return False
+                continue
     except Exception as e:
         return False
 

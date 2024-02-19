@@ -25,7 +25,12 @@ SECRET_KEY = 'django-insecure-uud=y1^y^57835^fr&@$yb8c5$h!8+hqb^a*=vyk0*pzz+)d(k
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['masto-mail-blocker.localhost']
+HOST = None
+
+if 'HOST' in os.environ:
+    HOST = os.environ['HOST']
+
+ALLOWED_HOSTS = [HOST]
 
 
 # Application definition

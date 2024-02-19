@@ -12,12 +12,7 @@ class HomeView(TemplateView):
 
     def post(self, request, *args, **kwargs):
         try:
-            client = self._create_client(request)
-            if initial_mail_adding(client):
-                client.save()
-                messages.success(request, 'Your instance was successfully added.', extra_tags='alert-success')
-            else:
-                messages.error(request, 'Something went wrong adding your instance!', extra_tags='alert-danger')
+            self._create_client(request)
         except IntegrityError:
             messages.error(request, 'This instance already exists in our database!', extra_tags='alert-danger')
         except Exception as e:
@@ -30,4 +25,5 @@ class HomeView(TemplateView):
         client.client_secret = request.POST['client-secret']
         client.access_token = request.POST['access-token']
         client.client_url = request.POST['host']
-        return client
+        client.save()
+        messages.success(request, 'Your instance was successfully added.', extra_tags='alert-success')
