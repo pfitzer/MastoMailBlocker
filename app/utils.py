@@ -1,9 +1,9 @@
 import requests
 
-from app.models import Client, Domain
+from app.models import Domain
 
 
-def initial_mail_adding(client: Client) -> bool:
+def initial_mail_adding(client) -> bool:
     """
     Adds initial email domains to the email domain block list for a specified client.
 

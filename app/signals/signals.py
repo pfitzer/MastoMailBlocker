@@ -1,10 +1,11 @@
-from django.db.models.signals import post_save
+import django.dispatch
 from django.dispatch import receiver
 
-from app.models import Client
 from app.utils import initial_mail_adding
 
+client_initial = django.dispatch.Signal()
 
-@receiver(post_save, sender=Client)
-def send_domains(sender, instance, created, **kwargs):
+
+@receiver(client_initial)
+def send_domains(sender, instance, **kwargs):
     initial_mail_adding(instance)

@@ -7,7 +7,7 @@ class Client(models.Model):
     Model class representing a client.
 
     Attributes:
-    - client_id (str): The client's ID.
+    - client_key (str): The client's ID.
     - client_secret (str): The client's secret.
     - client_url (str): The client's URL.
     - access_token (str, optional): The client's access token.
@@ -17,7 +17,7 @@ class Client(models.Model):
     - __str__(): Returns the client's URL as a string.
 
     """
-    client_id = models.CharField(max_length=255, unique=True, null=False, blank=False)
+    client_key = models.CharField(max_length=255, unique=True, null=False, blank=False)
     client_secret = models.CharField(max_length=255,  null=False, blank=False)
     client_url = models.CharField(max_length=255, null=False, blank=False)
     access_token = models.CharField(max_length=255, null=False, blank=False)

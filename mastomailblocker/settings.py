@@ -45,7 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.admindocs',
     'app',
     'bootstrap5',
-    'django_cron'
+    'django_cron',
 ]
 
 MIDDLEWARE = [
