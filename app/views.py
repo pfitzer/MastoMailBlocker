@@ -1,9 +1,8 @@
 from django.contrib import messages
 from django.db import IntegrityError
 from django.shortcuts import render, redirect
-from django.views.generic import TemplateView
-from app.models import Client
-from app.utils import initial_mail_adding
+from django.views.generic import TemplateView, ListView
+from app.models import Client, Faq
 
 
 class HomeView(TemplateView):
@@ -27,3 +26,9 @@ class HomeView(TemplateView):
         client.client_url = request.POST['host']
         client.save()
         messages.success(request, 'Your instance was successfully added.', extra_tags='alert-success')
+
+
+class FaqView(ListView):
+    template_name = 'faq.html'
+    model = Faq
+    context_object_name = 'faqs'

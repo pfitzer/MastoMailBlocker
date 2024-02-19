@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="accordion" id="faqAccordion">
+        {% for faq in faqs %}
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="faq{{ faq.pk }}">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#collapse{{ faq.pk }}" aria-expanded="false"
+                            aria-controls="collapse{{ faq.pk }}">
+                        {{ faq.title }}
+                    </button>
+                </h2>
+                <div id="collapse{{ faq.pk }}" class="accordion-collapse collapse show" aria-labelledby="headingOne"
+                     data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        {{ faq.text}}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
