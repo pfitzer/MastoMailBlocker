@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'app',
     'bootstrap5',
     'django_cron',
+    'django_q'
 ]
 
 MIDDLEWARE = [
@@ -110,6 +111,13 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
+        'LOCATION': 'django_cache',
+    }
+}
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
@@ -140,3 +148,13 @@ CRON_CLASSES = [
 ]
 
 DISPOSABLE_MAILS_URL = 'https://raw.githubusercontent.com/disposable-email-domains/disposable-email-domains/master/disposable_email_blocklist.conf'
+
+Q_CLUSTER = {
+    'name': 'DjangoORM',
+    'workers': 4,
+    'timeout': 90,
+    'retry': 120,
+    'queue_limit': 50,
+    'bulk': 10,
+    'orm': 'default'
+}

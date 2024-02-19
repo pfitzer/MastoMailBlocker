@@ -2,9 +2,11 @@ import urllib.parse
 
 import requests
 from django.urls import resolve
+from django_q.tasks import async_task
 
 from app.models import Client
 from app.signals.signals import client_initial
+from app.utils import initial_mail_adding
 
 APP_NAME = "MastoMailBlocker"
 SCOPES = 'read admin:write:email_domain_blocks'
@@ -77,4 +79,4 @@ class Mastodon:
         return response['access_token']
 
     def auth_ready(self):
-        client_initial.send(sender=self.__class__, instance=self.client)
+        async_task(initial_mail_adding, self.client)

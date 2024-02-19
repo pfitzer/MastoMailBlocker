@@ -42,7 +42,7 @@ services:
       sh -c "python manage.py migrate && python manage.py createsuperuser --noinput &&
         python manage.py importdomains &&
         python manage.py collectstatic --noinput &&
-        uwsgi --ini /code/uwsgi.ini"
+        uwsgi --ini /code/uwsgi.ini && python manage.py qcluster"
 
 volumes:
   static:
