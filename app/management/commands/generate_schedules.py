@@ -25,7 +25,7 @@ class Command(BaseCommand):
         )
         Schedule.objects.create(
             func='app.tasks.create_db_backup',
-            schedule_type=Schedule.MINUTES,
-            minutes=5,
+            schedule_type=Schedule.CRON,
+            cron='0 */12 * * *',
             repeats=-1
         )
