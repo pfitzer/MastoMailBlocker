@@ -38,6 +38,9 @@ If you want to contribute, feel free to do so. Help is always welcome.
 git clone https://github.com/pfitzer/MastoMailBlocker.git
 
 cd MastoMailBlocker
+
+#use the development settings
+export DJANGO_SETTINGS_MODULE=mastomailblocker.dev_settings
 # create a virtual environment
 python -m venv -venv
 
