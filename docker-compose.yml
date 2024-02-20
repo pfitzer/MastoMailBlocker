@@ -32,12 +32,13 @@ services:
 #      - LETSENCRYPT_HOST=${HOST}
 #      - LETSENCRYPT_EMAIL=p${DJANGO_SUPERUSER_EMAIL}
     env_file:
-      - .env.example
+      - .env
     expose:
       - 3031
     volumes:
       - uwsgi_data:/tmp/uwsgi/
       - static:/code/staticfiles
+      - ./backup:/code/backup
     command: >
       sh -c "python manage.py migrate &&
         python manage.py createsuperuser --noinput &&
@@ -46,8 +47,9 @@ services:
         python manage.py loaddata app/fixtures/db.json
         python manage.py collectstatic --noinput &&
         python manage.py generate_schedules &&
-        uwsgi --ini /code/uwsgi.docker.ini &&
-        python manage.py qcluster"
+        supervisord -c supervisord.conf &&
+        uwsgi --ini /code/uwsgi.docker.ini"
 
 volumes:
   static:
+  uwsgi_data:

@@ -21,4 +21,12 @@ class Command(BaseCommand):
         Schedule.objects.create(
             func='app.schedule.update_mail_domains',
             schedule_type=Schedule.WEEKLY,
-            repeats=-1)
+            repeats=-1
+        )
+        Schedule.objects.create(
+            func='django.core.management.call_command',
+            args='dumpdata > backup/backup.json',
+            schedule_type=Schedule.MINUTES,
+            minutes=5,
+            repeats=-1
+        )

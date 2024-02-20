@@ -17,3 +17,6 @@ media
 .env.example
 .env
 /.github/
+/backup/
+/.git/
+.gitignore
