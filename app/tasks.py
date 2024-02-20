@@ -1,5 +1,6 @@
 import time
 
+from app.exception import VerifyFailedException
 from app.models import Domain
 
 
@@ -16,11 +17,12 @@ def initial_mail_adding(mastodon) -> bool:
     try:
         domains = Domain.objects.all()
         for domain in domains:
-            status_code = mastodon.send_domain_block(domain)
+            try:
+                mastodon.send_domain_block(domain)
+            except VerifyFailedException:
+                break
             # django api has a limit of 300 calls in 5 min
-            time.sleep(1)
-            if status_code != 200:
-                continue
+            time.sleep(0.5)
     except Exception as e:
         return False
 

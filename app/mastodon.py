@@ -3,6 +3,8 @@ import urllib.parse
 import requests
 from django_q.tasks import async_task
 
+from app.exception import VerifyFailedException
+
 APP_NAME = "MastoMailBlocker"
 SCOPES = 'read admin:write:email_domain_blocks'
 
@@ -75,11 +77,19 @@ class Mastodon:
         return response['access_token']
 
     def send_domain_block(self, domain: str):
+        if not self.verify_credentials():
+            self.client.delete()
+            raise VerifyFailedException('Invalid credentials')
         headers = {'Authorization': 'Bearer ' + self.client.access_token}
         payload = {'domain': domain}
         r = requests.post(f"{self.client.client_url}/api/v1/admin/email_domain_blocks", headers=headers,
                           data=payload)
         return r.status_code
+
+    def verify_credentials(self):
+        headers = {'Authorization': 'Bearer ' + self.client.access_token}
+        r = requests.get(f'{self.client.client_url}/api/v1/apps/verify_credentials', headers=headers)
+        return r.status_code == 200
 
     def auth_ready(self):
         async_task("app.tasks.initial_mail_adding", self)

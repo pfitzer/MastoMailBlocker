@@ -3,6 +3,7 @@ import urllib.request
 from django.conf import settings
 from django.db import IntegrityError
 
+from app.exception import VerifyFailedException
 from app.mastodon import Mastodon
 from app.models import Client, Domain
 
@@ -18,5 +19,8 @@ def update_mail_domains():
         except IntegrityError:
             continue
         for client in clients:
-            mastodon = Mastodon(client)
-            mastodon.send_domain_block(domain.name)
+            try:
+                mastodon = Mastodon(client)
+                mastodon.send_domain_block(domain.name)
+            except VerifyFailedException:
+                break
