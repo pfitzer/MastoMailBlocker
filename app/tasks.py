@@ -1,7 +1,11 @@
+import os
 import time
+
+from django.conf import settings
 
 from app.exception import VerifyFailedException
 from app.models import Domain
+from django.core.management import call_command
 
 
 def initial_mail_adding(mastodon) -> bool:
@@ -27,3 +31,7 @@ def initial_mail_adding(mastodon) -> bool:
         return False
 
     return True
+
+
+def create_db_backup():
+    call_command('dumpdata', '>', os.path.join(settings.BASE_DIR, 'backup', 'backup.json'))

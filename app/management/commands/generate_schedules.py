@@ -24,8 +24,7 @@ class Command(BaseCommand):
             repeats=-1
         )
         Schedule.objects.create(
-            func='django.core.management.call_command',
-            args='dumpdata > backup/backup.json',
+            func='app.tasks.create_db_backup',
             schedule_type=Schedule.MINUTES,
             minutes=5,
             repeats=-1
