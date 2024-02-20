@@ -39,11 +39,13 @@ services:
       - uwsgi_data:/tmp/uwsgi/
       - static:/code/staticfiles
     command: >
-      sh -c "python manage.py migrate && python manage.py createsuperuser --noinput &&
-        python manage.py importdomains &&
+      sh -c "python manage.py migrate &&
+        python manage.py createsuperuser --noinput &&
+        python manage.py import_domains &&
         python manage.py collectstatic --noinput &&
-        uwsgi --ini /code/uwsgi.ini && python manage.py qcluster"
+        python manage.py generate_schedules &&
+        uwsgi --ini /code/uwsgi.ini &&
+        python manage.py qcluster"
 
 volumes:
   static:
-  uwsgi_data:

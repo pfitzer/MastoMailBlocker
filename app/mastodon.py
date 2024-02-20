@@ -1,12 +1,7 @@
 import urllib.parse
 
 import requests
-from django.urls import resolve
 from django_q.tasks import async_task
-
-from app.models import Client
-from app.signals.signals import client_initial
-from app.utils import initial_mail_adding
 
 APP_NAME = "MastoMailBlocker"
 SCOPES = 'read admin:write:email_domain_blocks'
@@ -35,7 +30,8 @@ class Mastodon:
             Obtains an access token from the Mastodon API using the provided authorization code.
 
     """
-    def __init__(self, client: Client = None):
+
+    def __init__(self, client=None):
         self.client = client
 
     def register_app(self, request):
@@ -78,5 +74,12 @@ class Mastodon:
         response = req.json()
         return response['access_token']
 
+    def send_domain_block(self, domain: str):
+        headers = {'Authorization': 'Bearer ' + self.client.access_token}
+        payload = {'domain': domain}
+        r = requests.post(f"{self.client.client_url}/api/v1/admin/email_domain_blocks", headers=headers,
+                          data=payload)
+        return r.status_code
+
     def auth_ready(self):
-        async_task(initial_mail_adding, self.client)
+        async_task("app.tasks.initial_mail_adding", self)

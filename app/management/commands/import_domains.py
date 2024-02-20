@@ -8,6 +8,20 @@ from app.models import Domain
 
 
 class Command(BaseCommand):
+    """
+    This class represents a command to import email domains to the database.
+
+    Attributes:
+        help (str): A string that specifies the help message for the command.
+
+    Methods:
+        handle(*args, **options): This method is responsible for importing the email domains to the database.
+
+    Usage:
+        To use this command, simply run the following command:
+
+            python manage.py import_domains
+    """
     help = 'Import email domains to database'
 
     def handle(self, *args, **options):

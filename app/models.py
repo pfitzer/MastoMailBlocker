@@ -18,7 +18,7 @@ class Client(models.Model):
 
     """
     client_key = models.CharField(max_length=255, unique=True, null=False, blank=False)
-    client_secret = models.CharField(max_length=255,  null=False, blank=False)
+    client_secret = models.CharField(max_length=255, null=False, blank=False)
     client_url = models.CharField(max_length=255, null=False, blank=False)
     access_token = models.CharField(max_length=255, null=False, blank=False)
     created_at = models.DateTimeField(auto_now_add=True)
