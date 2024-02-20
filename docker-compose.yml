@@ -45,7 +45,7 @@ services:
         python manage.py loaddata app/fixtures/db.json
         python manage.py collectstatic --noinput &&
         python manage.py generate_schedules &&
-        uwsgi --ini /code/uwsgi.ini &&
+        uwsgi --ini /code/uwsgi.docker.ini &&
         python manage.py qcluster"
 
 volumes:
