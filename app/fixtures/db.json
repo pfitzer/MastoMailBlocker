@@ -1,0 +1,42 @@
+[
+  {
+    "model": "app.faq",
+    "pk": 1,
+    "fields": {
+      "title": "Why?",
+      "text": "One way to protect your Mastodon instance against spam bots is to prevent new registrations by excluding certain disposable email domains that they often use. You can either set it up yourself at /admin/email_domain_blocks or use this service. Of course, this doesn't provide absolute protection, but it does limit the options somewhat.",
+      "published": true,
+      "created_at": "2024-02-18T20:45:34.625Z"
+    }
+  },
+  {
+    "model": "app.faq",
+    "pk": 2,
+    "fields": {
+      "title": "Where do the domains come from?",
+      "text": "MastoMailBlocker uses the domains from a <a href=\"https://github.com/disposable-email-domains/disposable-email-domains\" target=\"_blank\">Github repository</a> that is regularly expanded.",
+      "published": true,
+      "created_at": "2024-02-20T11:03:54.642Z"
+    }
+  },
+  {
+    "model": "app.faq",
+    "pk": 3,
+    "fields": {
+      "title": "How does it work?",
+      "text": "When you register your instance, all previously known domains are sent to your instance via REST API. Since there are over 3000 domains, it may take some time until all of them are registered with you. Mastodon has an API limit of 300 requests per 5 minutes. We then check for new domains once a week and send them to all registered entities. You don't have to worry about anything else.",
+      "published": true,
+      "created_at": "2024-02-20T11:09:53.233Z"
+    }
+  },
+  {
+    "model": "app.faq",
+    "pk": 4,
+    "fields": {
+      "title": "What else can I do to protect myself against spam accounts?",
+      "text": "Go to /admin/settings/registrations and set \"Approval required for sign up\". This means that new accounts are not activated automatically; an admin or moderator has to do this manually.",
+      "published": true,
+      "created_at": "2024-02-20T11:14:12.277Z"
+    }
+  }
+]

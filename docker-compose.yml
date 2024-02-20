@@ -42,6 +42,7 @@ services:
       sh -c "python manage.py migrate &&
         python manage.py createsuperuser --noinput &&
         python manage.py import_domains &&
+        python manage.py loaddata app/fixtures/db.json
         python manage.py collectstatic --noinput &&
         python manage.py generate_schedules &&
         uwsgi --ini /code/uwsgi.ini &&

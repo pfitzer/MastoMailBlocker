@@ -14,7 +14,7 @@
                 <div id="collapse{{ faq.pk }}" class="accordion-collapse collapse show" aria-labelledby="headingOne"
                      data-bs-parent="#faqAccordion">
                     <div class="accordion-body">
-                        {{ faq.text}}
+                        {{ faq.text|safe}}
                     </div>
                 </div>
             </div>
