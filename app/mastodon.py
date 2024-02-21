@@ -164,6 +164,12 @@ class Mastodon:
                          headers=headers)
         return r.status_code == 200
 
+    def get_instance(self):
+        r = requests.get(self.construct_api_url(self.client.client_url, '/api/v2/instance'))
+        if r.status_code == 200:
+            return r.json()
+        return None
+
     def auth_ready(self):
         """
         This method is used to initiate the process of adding the initial mail in the application.
