@@ -22,10 +22,7 @@ def initial_mail_adding(mastodon) -> bool:
     try:
         domains = Domain.objects.all()
         for domain in domains:
-            try:
-                mastodon.send_domain_block(domain)
-            except VerifyFailedException:
-                break
+            mastodon.send_domain_block(domain)
             # django api has a limit of 300 calls in 5 min
             time.sleep(0.5)
     except Exception as e:

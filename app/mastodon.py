@@ -143,15 +143,9 @@ class Mastodon:
         Returns:
         - status_code (int): The HTTP status code received from the API.
 
-        Raises:
-        - Exception: When credentials are not verified and the request cannot be processed.
-
         Example usage:
             send_domain_block('example.com')
         """
-        if not self.verify_credentials():
-            self.client.delete()
-            raise
         headers = {'Authorization': 'Bearer ' + self.client.access_token}
         payload = {'domain': domain}
         r = requests.post(self.construct_api_url(self.client.client_url, '/api/v1/admin/email_domain_blocks'),
@@ -176,4 +170,7 @@ class Mastodon:
 
         :param self: The instance of the class.
         """
-        async_task("app.tasks.initial_mail_adding", self)
+        if self.verify_credentials():
+            async_task("app.tasks.initial_mail_adding", self)
+        else:
+            self.client.delete()
