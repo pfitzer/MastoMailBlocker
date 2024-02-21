@@ -24,7 +24,7 @@ def initial_mail_adding(mastodon) -> bool:
         for domain in domains:
             mastodon.send_domain_block(domain)
             # django api has a limit of 300 calls in 5 min
-            time.sleep(0.5)
+            time.sleep(1)
     except Exception as e:
         return False
 
