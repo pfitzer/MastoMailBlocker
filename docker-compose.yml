@@ -51,8 +51,6 @@ services:
 #      - LETSENCRYPT_EMAIL=p${DJANGO_SUPERUSER_EMAIL}
     env_file:
       - .env
-    expose:
-      - 3031
     volumes:
       - uwsgi_data:/tmp/uwsgi/
       - static:/code/staticfiles

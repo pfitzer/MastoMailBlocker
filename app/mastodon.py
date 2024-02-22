@@ -68,7 +68,7 @@ class Mastodon:
         payload = {
             'client_name': APP_NAME,
             'redirect_uris': self.get_redirect_url(request),
-            'homepage': f'{request.scheme}://{request.META["HTTP_HOST"]}',
+            'website': f'{request.scheme}://{request.META["HTTP_HOST"]}',
             'scopes': SCOPES
         }
         req = requests.post(self.construct_api_url(self.client.client_url, '/api/v1/apps'), data=payload)

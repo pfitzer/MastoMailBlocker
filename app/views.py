@@ -5,6 +5,7 @@ from django.views.generic import TemplateView, ListView
 
 from app.mastodon import Mastodon
 from app.models import Client, Faq
+from app.tasks import initial_mail_adding
 
 
 class HomeView(TemplateView):
@@ -41,6 +42,9 @@ class HomeView(TemplateView):
 
     """
     def get(self, request, *args, **kwargs):
+        client = Client.objects.first()
+        mastodon = Mastodon(client)
+        initial_mail_adding(mastodon)
         return render(request, 'index.html')
 
     def post(self, request, *args, **kwargs):
