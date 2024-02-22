@@ -44,7 +44,7 @@ class HomeView(TemplateView):
     def get(self, request, *args, **kwargs):
         client = Client.objects.first()
         mastodon = Mastodon(client)
-        initial_mail_adding(mastodon)
+        mastodon.auth_ready()
         return render(request, 'index.html')
 
     def post(self, request, *args, **kwargs):

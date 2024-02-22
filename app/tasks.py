@@ -9,7 +9,7 @@ from app.exception import VerifyFailedException
 from app.models import Domain
 
 
-def initial_mail_adding(mastodon) -> bool:
+def initial_mail_adding(mastodon, domains) -> bool:
     """
     Adds initial email domains to the email domain block list for a specified client.
 
@@ -20,9 +20,8 @@ def initial_mail_adding(mastodon) -> bool:
     - bool: True if the domains were successfully added, False otherwise.
     """
     try:
-        domains = Domain.objects.all()
         for domain in domains:
-            mastodon.send_domain_block(domain.name)
+            mastodon.send_domain_block(domain)
             # django api has a limit of 300 calls in 5 min
             time.sleep(1)
     except Exception as e:
@@ -31,7 +30,7 @@ def initial_mail_adding(mastodon) -> bool:
     return True
 
 
-def create_db_backup() -> None:
+def create_db_backup() -> int:
     """
     Create a backup of the database.
 
@@ -51,3 +50,4 @@ def create_db_backup() -> None:
     with open(backup_file, 'w') as f:
         call_command('dumpdata', stdout=f)
     f.close()
+    return 0

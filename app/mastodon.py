@@ -1,7 +1,10 @@
 import urllib.parse
+from itertools import islice
 
 import requests
 from django_q.tasks import async_task
+
+from app.models import Domain
 
 APP_NAME = "MastoMailBlocker"
 SCOPES = 'read admin:write:email_domain_blocks'
@@ -177,7 +180,24 @@ class Mastodon:
 
         :param self: The instance of the class.
         """
-        if self.verify_credentials():
-            async_task("app.tasks.initial_mail_adding", self)
+        # if self.verify_credentials():
+        for domains in self._chunk(Domain.objects.all()):
+            async_task("app.tasks.initial_mail_adding", self, domains)
         else:
             self.client.delete()
+
+    @staticmethod
+    def _chunk(data: dict, size: int = 60) -> dict:
+        """
+        Split a dictionary into chunks of specified size.
+
+        Args:
+            data (dict): The dictionary of Domains to be chunked.
+            size (int, optional): The size of each chunk. Default is 60.
+
+        Returns:
+            dict: A dictionary containing the chunks of the original data.
+        """
+        it = iter(data)
+        for i in range(0, len(data), size):
+            yield [k.name for k in islice(it, size)]
