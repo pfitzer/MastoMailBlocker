@@ -6,6 +6,9 @@ services:
     ports:
       - "80:80"
 #      - "443:443"
+    depends_on:
+      - web
+      - db
     volumes:
       - /var/run/docker.sock:/tmp/docker.sock:ro
       - ./.nginx/default_location:/etc/nginx/vhost.d/default_location
@@ -23,6 +26,21 @@ services:
 #      - DEFAULT_EMAIL=${DJANGO_SUPERUSER_EMAIL}
 #      - NGINX_PROXY_CONTAINER=nginx-proxy
 #    recstart: unless-stopped
+  db:
+    image: postgres:latest
+    container_name: masto-mail-blocker_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    expose:
+      - 5432
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=mastomailblocker
+    healthcheck:
+      test: "pg_isready --username=postgres && psql --username=postgres --list"
+      timeout: 10s
+      retries: 20
   web:
     build: .
     container_name: masto-mail-blocker
@@ -39,6 +57,9 @@ services:
       - uwsgi_data:/tmp/uwsgi/
       - static:/code/staticfiles
       - ./backup:/code/backup
+    depends_on:
+      db:
+        condition: service_healthy
     command: >
       sh -c "python manage.py migrate &&
         python manage.py createsuperuser --noinput &&
@@ -53,3 +74,4 @@ services:
 volumes:
   static:
   uwsgi_data:
+  postgres_data:
