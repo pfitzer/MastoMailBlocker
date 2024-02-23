@@ -5,9 +5,6 @@ from datetime import datetime
 from django.conf import settings
 from django.core.management import call_command
 
-from app.exception import VerifyFailedException
-from app.models import Domain
-
 
 def initial_mail_adding(mastodon, domains) -> bool:
     """
@@ -25,8 +22,7 @@ def initial_mail_adding(mastodon, domains) -> bool:
             req = mastodon.send_domain_block(domain)
             # django api has a limit of 300 calls in 5 min
             if req['remaining'] <= 10:
-                date_obj = datetime.strptime(req['reset'], date_format)
-                time.sleep(abs((date_obj - datetime.now()).seconds))
+                time.sleep(300)
     except Exception as e:
         return False
 
