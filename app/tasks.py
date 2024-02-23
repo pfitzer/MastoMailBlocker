@@ -20,10 +20,13 @@ def initial_mail_adding(mastodon, domains) -> bool:
     - bool: True if the domains were successfully added, False otherwise.
     """
     try:
+        date_format = '%Y-%m-%d %H:%M:%S'
         for domain in domains:
-            mastodon.send_domain_block(domain)
+            req = mastodon.send_domain_block(domain)
             # django api has a limit of 300 calls in 5 min
-            time.sleep(1)
+            if req['remaining'] <= 10:
+                date_obj = datetime.strptime(req['reset'], date_format)
+                time.sleep(abs((date_obj - datetime.now()).seconds))
     except Exception as e:
         return False
 

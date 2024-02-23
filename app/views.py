@@ -5,7 +5,6 @@ from django.views.generic import TemplateView, ListView
 
 from app.mastodon import Mastodon
 from app.models import Client, Faq
-from app.tasks import initial_mail_adding
 
 
 class HomeView(TemplateView):

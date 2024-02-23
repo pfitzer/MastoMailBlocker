@@ -155,7 +155,8 @@ class Mastodon:
         r = requests.post(self.construct_api_url(self.client.client_url, '/api/v1/admin/email_domain_blocks'),
                           headers=headers,
                           data=payload)
-        return r.status_code
+        return {'limit': r.headers.get('x-ratelimit-limit'), 'remaining': r.headers.get('x-ratelimit-remaining'),
+                'reset': r.headers.get('x-ratelimit-reset')}
 
     def verify_credentials(self):
         """
@@ -180,14 +181,11 @@ class Mastodon:
 
         :param self: The instance of the class.
         """
-        # if self.verify_credentials():
-        for domains in self._chunk(Domain.objects.all()):
+        for domains in self.chunk(Domain.objects.all()):
             async_task("app.tasks.initial_mail_adding", self, domains)
-        else:
-            self.client.delete()
 
     @staticmethod
-    def _chunk(data: dict, size: int = 60) -> dict:
+    def chunk(data: dict, size: int = 60) -> dict:
         """
         Split a dictionary into chunks of specified size.
 
