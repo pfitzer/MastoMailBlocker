@@ -6,11 +6,11 @@ from django_q.tasks import async_task
 
 from app.models import Domain
 
-APP_NAME = "MastoMailBlocker"
-SCOPES = 'read admin:write:email_domain_blocks'
-
 
 class Mastodon:
+    APP_NAME = "MastoMailBlocker"
+    SCOPES = 'read admin:write:email_domain_blocks'
+
     """
     class Mastodon:
     """
@@ -69,10 +69,10 @@ class Mastodon:
             If the registration fails, returns None, None.
         """
         payload = {
-            'client_name': APP_NAME,
+            'client_name': self.APP_NAME,
             'redirect_uris': self.get_redirect_url(request),
             'website': f'{request.scheme}://{request.META["HTTP_HOST"]}',
-            'scopes': SCOPES
+            'scopes': self.SCOPES
         }
         req = requests.post(self.construct_api_url(self.client.client_url, '/api/v1/apps'), data=payload)
         if req.status_code == 200:
@@ -106,7 +106,7 @@ class Mastodon:
             'response_type': 'code',
             'grant_type': 'authorization_code',
             'redirect_uri': self.get_redirect_url(request),
-            'scope': SCOPES
+            'scope': self.SCOPES
         }
         url = self.construct_api_url(self.client.client_url, '/oauth/authorize/?')
         return url + urllib.parse.urlencode(payload)
@@ -130,7 +130,7 @@ class Mastodon:
             'client_id': self.client.client_key,
             'client_secret': self.client.client_secret,
             'redirect_uri': self.get_redirect_url(request),
-            'scope': SCOPES
+            'scope': self.SCOPES
         }
 
         req = requests.post(self.construct_api_url(self.client.client_url, '/oauth/token'), data=payload)
