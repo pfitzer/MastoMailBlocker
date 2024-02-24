@@ -26,6 +26,9 @@ cp .env.example .env
 
 # at first time or after code update
 docker-compose up -d --build
+
+# create your superuser
+docker-compose run --rm web python manage.py createsuperuser --noinput
 ```
 
 development
