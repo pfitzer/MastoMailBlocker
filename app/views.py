@@ -3,6 +3,7 @@ from django.db import IntegrityError
 from django.shortcuts import render, redirect
 from django.views.generic import TemplateView, ListView
 
+from app.exception import MastodonException
 from app.mastodon import Mastodon
 from app.models import Client, Faq
 
@@ -40,26 +41,39 @@ class HomeView(TemplateView):
                 - In all cases, it redirects the user back to the home page.
 
     """
+
     def get(self, request, *args, **kwargs):
         return render(request, 'index.html')
 
     def post(self, request, *args, **kwargs):
         try:
-            client = Client()
-            client.client_url = request.POST['host']
-            client.save()
-            mastodon = Mastodon(client=client)
-            client_key, client_secret = mastodon.register_app(request)
-            client.client_key = client_key
-            client.client_secret = client_secret
-            client.save()
-            redirect_url = mastodon.get_authorization_url(request)
+            redirect_url = self._handle_form_submission(request)
             return redirect(redirect_url)
         except IntegrityError:
             messages.error(request, 'This instance already exists in our database!', extra_tags='alert-danger')
         except Exception as e:
             messages.error(request, f"An error occurred: {e}", extra_tags='alert-danger')
         return redirect('home')
+
+    def _handle_form_submission(self, request):
+        client = self._create_client(request)
+        mastodon = Mastodon(client=client)
+        self._register_application(client, mastodon, request)
+        return mastodon.get_authorization_url(request)
+
+    @staticmethod
+    def _create_client(request):
+        client = Client()
+        client.client_url = request.POST['host']
+        client.save()
+        return client
+
+    @staticmethod
+    def _register_application(client, mastodon, request):
+        client_key, client_secret = mastodon.register_app(request)
+        client.client_key = client_key
+        client.client_secret = client_secret
+        client.save()
 
 
 class FaqView(ListView):
@@ -92,12 +106,22 @@ def get_code(request, client_id):
     """
     if request.GET.get('code'):
         code = request.GET.get('code')
-        client = Client.objects.get(pk=client_id)
-        mastodon = Mastodon(client=client)
-        client.access_token = mastodon.obtain_access_token(code, request)
-        client.save()
-        mastodon.auth_ready()
-        messages.success(request, 'Your instance was successfully added.', extra_tags='alert-success')
+        try:
+            client = Client.objects.get(pk=client_id)
+            mastodon = Mastodon(client=client)
+            client.access_token = mastodon.obtain_access_token(code, request)
+            client.save()
+            mastodon.auth_ready()
+            messages.success(request, 'Your instance was successfully added.', extra_tags='alert-success')
+        except Client.DoesNotExist:
+            create_error_message(request, "This client does not exist.")
+        except MastodonException as e:
+            create_error_message(request, str(e))
+
     else:
-        messages.error(request, "An error occurred getting the access token from your instance", extra_tags='alert-danger')
+        create_error_message(request, "An error occurred getting the access token from your instance")
     return redirect('home')
+
+
+def create_error_message(request, msg: str):
+    messages.error(request, msg, extra_tags='alert-danger')

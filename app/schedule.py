@@ -3,7 +3,7 @@ import urllib.request
 from django.conf import settings
 from django.db import IntegrityError
 
-from app.exception import VerifyFailedException
+from app.exception import MastodonException
 from app.mastodon import Mastodon
 from app.models import Client, Domain
 

@@ -1,0 +1,15 @@
+{% if clients %}
+    <div class="row px-3 py-3 my-3 border rounded justify-content-center">
+        <h2 class="text-secondary text-capitalize text-center">Latest Instances using this service</h2>
+        <{% for client in clients %}
+        <div class="col-sm-12 col-md-6 col-lg-3 border rounded px-2 py-3 my-3 bg-dark text-white m-3">
+            <img class="img-thumbnail mb-2" src="{{ client.thumbnail.url }}" alt="instance thumbnail">
+            <h3><a class="text-white text-decoration-none" href="{{ client.domain }}"
+                   target="_blank">{{ client.title }}</a></h3>
+            <div class="">
+                {{ client.description }}
+            </div>
+        </div>
+    {% endfor %}
+    </div>
+{% endif %}

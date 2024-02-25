@@ -4,6 +4,7 @@ from itertools import islice
 import requests
 from django_q.tasks import async_task
 
+from app.exception import MastodonException
 from app.models import Domain
 
 
@@ -134,6 +135,8 @@ class Mastodon:
         }
 
         req = requests.post(self.construct_api_url(self.client.client_url, '/oauth/token'), data=payload)
+        if req.status_code != 200:
+            raise MastodonException(req.json()['error_description'])
         response = req.json()
         return response['access_token']
 
