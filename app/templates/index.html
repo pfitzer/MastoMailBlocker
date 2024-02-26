@@ -13,9 +13,9 @@
             {% show_domain_count %}
         </div>
     </div>
-    <div class="px-4 py-5 my-5 border rounded">
+    <div class="px-4 py-5 my-5 border rounded bg-secondary text-white">
         <div class="col-lg-8 mx-auto">
-            <div class="text-secondary text-center">
+            <div class="text-center">
                 <p>Just input the URL of your instance. And remember, <strong>you need to be
                     administrator</strong> of this instance. That`s it!</p>
                 <p>If you don`t want to use this service anymore, just revoke authorization.</p>
@@ -23,15 +23,15 @@
             <form id="ClientForm" action="{% url 'home' %}" method="POST">
                 {% csrf_token %}
                 <div class="row gy-2 gx-3 align-items-center">
-                    <div class="col-auto">
+                    <div class="col-auto pb-4">
                         <label for="host" class="col-form-label">Client Url</label>
                     </div>
                     <div class="col-sm-9">
-                        <input class="form-control" type="text" name="host" value="" placeholder="https://you.social" aria-describedby="authHelp">
-                        <div id="authHelp" class="form-text">You will be redirect to your instance to authorize this app.</div>
+                        <input class="form-control" type="text" name="host" id="host" value="" placeholder="https://you.social" aria-describedby="authHelp" required>
+                        <div id="authHelp" class="form-text text-white">You will be redirect to your instance to authorize this app.</div>
                     </div>
-                    <div class="col-auto">
-                        <button type="submit" class="btn btn-primary">Authorize</button>
+                    <div class="col-auto pb-4">
+                        <button type="submit" class="btn btn-success">Authorize</button>
                     </div>
                 </div>
             </form>
