@@ -5,6 +5,9 @@ from datetime import datetime
 from django.conf import settings
 from django.core.management import call_command
 
+BACKUP_DIR = os.path.join(settings.BASE_DIR, 'backup')
+DAYS = 7
+
 
 def initial_mail_adding(mastodon, domains) -> bool:
     """
@@ -44,8 +47,23 @@ def create_db_backup() -> int:
         create_db_backup()
     """
     date = datetime.now().strftime("%Y%m%d-%H%M%S")
-    backup_file = os.path.join(settings.BASE_DIR, 'backup', f'backup-{date}.json')
+    backup_file = os.path.join(BACKUP_DIR, f'backup-{date}.json')
     with open(backup_file, 'w') as f:
         call_command('dumpdata', stdout=f)
     f.close()
+
+    delete_old_backups()
     return 0
+
+
+def delete_old_backups():
+    """
+    Deletes old backups from the designated backup directory.
+
+    :return: None
+    """
+    for root, dirs, files in os.walk(BACKUP_DIR):
+        for name in files:
+            filename = os.path.join(root, name)
+            if os.stat(filename).st_mtime < time.time() - (DAYS * 86400):
+                os.remove(filename)
