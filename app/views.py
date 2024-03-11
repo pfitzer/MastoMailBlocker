@@ -123,5 +123,16 @@ def get_code(request, client_id):
     return redirect('home')
 
 
+class DisclaimerView(TemplateView):
+    def get(self, request, *args, **kwargs):
+        return render(request, 'disclaimer.html')
+
+
+class ImprintView(TemplateView):
+
+    def get(self, request, *args, **kwargs):
+        return render(request, 'impressum.html')
+
+
 def create_error_message(request, msg: str):
     messages.error(request, msg, extra_tags='alert-danger')

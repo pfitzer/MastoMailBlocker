@@ -6,7 +6,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="google-site-verification" content="vOA5rwnj_sKVOsWEQtkrrJOBdpIwIPizkReW5JdJyxs" />
+    <meta name="google-site-verification" content="vOA5rwnj_sKVOsWEQtkrrJOBdpIwIPizkReW5JdJyxs"/>
     <title>MastoMailBlocker</title>
     {% bootstrap_css %}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"
@@ -38,13 +38,24 @@
         {% endif %}
         {% block content %}
         {% endblock %}
-    {% show_latest_instances %}
+        {% show_latest_instances %}
     </div>
 </main>
 <footer class="footer d-flex flex-wrap mt-auto py-3 bg-dark text-white">
     <div class="container">
         <div class="row">
-            <div class="col-6"></div>
+            <div class="col-6">
+                <div class="d-flex col-6 justify-content-start">
+                    <ul class="d-flex list-unstyled">
+                        <li class="ms-3 nav-link">
+                            <a href="{% url 'imprint' %}">Imprint</a>
+                        </li>
+                        <li class="ms-3 nav-link">
+                            <a href="{% url 'disclaimer' %}">Disclaimer</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
             <div class="d-flex col-6 justify-content-end">
                 <ul class="d-flex list-unstyled">
                     <li class="ms-3">
