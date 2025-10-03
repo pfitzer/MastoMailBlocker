@@ -63,9 +63,16 @@ class HomeView(TemplateView):
 
     @staticmethod
     def _create_client(request):
-        client = Client()
-        client.client_url = request.POST['host']
-        client.save()
+        """Create a client with only URL initially. OAuth fields populated later."""
+        client_url = request.POST.get('host', '').strip()
+
+        # Normalize URL
+        if client_url and not client_url.startswith(('http://', 'https://')):
+            client_url = f'https://{client_url}'
+
+        client = Client.objects.create(
+            client_url=client_url.rstrip('/')
+        )
         return client
 
     @staticmethod

@@ -30,5 +30,7 @@ def update_mail_domains():
             if mastodon.verify_credentials():
                 mastodon.send_domain_block(domain.name)
             else:
-                mastodon.client.delete()
+                # Mark client as inactive instead of deleting
+                mastodon.client.is_active = False
+                mastodon.client.save(update_fields=['is_active'])
                 break
