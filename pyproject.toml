@@ -6,13 +6,15 @@ readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
     "croniter",
-    "django",
+    "django>=4.2.28",
     "django-bootstrap-v5",
     "django-q2",
     "docutils",
     "psycopg[binary]",
     "pyfakefs",
     "requests",
+    "sqlparse>=0.5.4",
+    "urllib3>=2.6.3",
 ]
 
 [dependency-groups]
